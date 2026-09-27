@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+precos.db
+cron.log
+.env
