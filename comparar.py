@@ -7,6 +7,7 @@ from datetime import datetime
 from validar import validar
 from buscar import trecho_da_tarifa
 from validar_json import aceitar
+from modelo import pedir_json
 
 def decidir(preco_anterior, preco_hoje):
     if preco_hoje < preco_anterior:
@@ -18,16 +19,8 @@ conexao = sqlite3.connect("precos.db")
 chave = os.environ.get("SENDGRID_API_KEY")
 
 trecho = trecho_da_tarifa()
-resposta = ""
-if trecho and "R$" in trecho:
-    numero = trecho.split("R$")[1].split(" ")[0].replace("*", "")
-    numero = numero.replace(".", "").replace(",", ".")
-    resposta = json.dumps({
-        "preco": float(numero),
-        "moeda": "BRL",
-        "data": "2027-03-09",
-        "achou": True,
-    })
+resposta = pedir_json(trecho)
+print(resposta)
 
 if aceitar(resposta) != "aceito":
     print("leitura recusada, e-mail não saiu")
